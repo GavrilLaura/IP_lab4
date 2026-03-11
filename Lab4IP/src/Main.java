@@ -1,13 +1,44 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-void main() {
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    IO.println(String.format("Hello and welcome!"));
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("==========================================");
+        System.out.println("    INITIALIZARE SISTEM EDUCONNECT        ");
+        System.out.println("==========================================");
 
-    for (int i = 1; i <= 5; i++) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        IO.println("i = " + i);
+        NotificationDispatcher mockDispatcher = new NotificationDispatcher() {
+            @Override
+            public void dispatchEvent(EventType eventType, String userId, String message) {
+                System.out.println(">>> [Dispatcher Notificari] Trimit alerta Node.js...");
+                System.out.println("    -> Tip   : " + eventType);
+                System.out.println("    -> User  : " + userId);
+                System.out.println("    -> Mesaj : " + message);
+            }
+        };
+
+        ProgressManager mockProgressManager = new ProgressManager() {
+            @Override
+            public void actualizeazaProgres(String studentId, String cursId, double scor, boolean aTrecut) {
+                System.out.println(">>> [Manager de Progres] UPDATE progres curs in DB...");
+                System.out.println("    -> Student: " + studentId + " | Scor: " + scor + "% | Admis: " + aTrecut);
+            }
+        };
+
+        AntiCheatTracker antiCheatTracker = new AntiCheatTracker(mockDispatcher, true, true, 3);
+        MotorDeTeste motorDeTeste = new MotorDeTeste(mockProgressManager, 60, 50.0, 2, true);
+
+        System.out.println("Sistem initializat cu succes.\n");
+
+        String currentStudentId = "STUDENT_RX90";
+        String currentCourseId = "CURS_PROGRAMARE_WEB";
+
+        System.out.println("--- SCENARIU 1: Studentul incalca regulile ---");
+        antiCheatTracker.detecteazaSchimbareTab(currentStudentId, currentCourseId);
+        antiCheatTracker.detecteazaSchimbareTab(currentStudentId, currentCourseId);
+
+        System.out.println("\n--- SCENARIU 2: Evaluare finala test ---");
+        motorDeTeste.evalueazaTest(currentStudentId, currentCourseId, 35, 40, 45);
+
+        System.out.println("\n==========================================");
+        System.out.println("            FINAL SIMULARE                ");
+        System.out.println("==========================================");
     }
 }
